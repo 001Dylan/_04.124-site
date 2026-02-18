@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAPITAL LENS — 投資の視点</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a08;
+  --bg2: #111110;
+  --bg3: #1a1a18;
+  --bg4: #222220;
+  --accent: #c9a84c;
+  --accent2: #e8c97a;
+  --text: #e8e4dc;
+  --text-muted: #7a7870;
+  --text-dim: #4a4840;
+  --border: #2a2a26;
+  --border2: #3a3a36;
+  --red: #c94c4c;
+  --green: #4caa6e;
+  --blue: #4c7ec9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ======= PAGE SYSTEM ======= */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ======= NAVIGATION ======= */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  border-bottom: 1px solid transparent;
+  transition: all 0.4s ease;
+}
+nav.scrolled {
+  border-bottom-color: var(--border);
+  backdrop-filter: blur(20px);
+  background: rgba(10,10,8,0.88);
+}
+.nav-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+.logo span { color: var(--text-muted); font-style: italic; }
+
+.nav-main-links {
+  display: flex;
+  gap: 0;
+  list-style: none;
+}
+.nav-item {
+  position: relative;
+}
+.nav-item > a {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+.nav-item > a:hover, .nav-item.active > a { color: var(--accent); }
+.nav-item > a .arrow {
+  font-size: 0.5rem;
+  transition: transform 0.3s;
+}
+.nav-item:hover > a .arrow { transform: rotate(180deg); }
+
+/* MEGA MENU */
+.mega-menu {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  padding: 2rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+  pointer-events: none;
+  min-width: 560px;
+}
+.nav-item:hover .mega-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+.mega-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.mega-col h5 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.mega-col ul { list-style: none; }
+.mega-col li { margin-bottom: 0.6rem; }
+.mega-col a {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.mega-col a:hover { color: var(--text); }
+.mega-col a::before {
+  content: '→';
+  font-size: 0.6rem;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.mega-col a:hover::before { opacity: 1; }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.nav-search {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.3rem;
+  transition: color 0.3s;
+}
+.nav-search:hover { color: var(--accent); }
+.nav-cta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.5rem 1.2rem;
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+/* ======= TICKER ======= */
+.ticker {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 0;
+  overflow: hidden;
+  margin-top: 64px; /* nav height */
+}
+.ticker-inner {
+  display: flex;
+  gap: 3rem;
+  animation: ticker 30s linear infinite;
+  width: max-content;
+}
+.ticker-item { display: flex; align-items: center; gap: 0.8rem; white-space: nowrap; }
+.ticker-symbol { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.1em; }
+.ticker-price { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text); }
+.ticker-change { font-family: 'DM Mono', monospace; font-size: 0.68rem; }
+.up { color: var(--green); }
+.down { color: var(--red); }
+.ticker-sep { color: var(--border2); font-size: 0.4rem; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ======= SHARED ======= */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.section-label::after { content: ''; width: 60px; height: 1px; background: var(--border); }
+h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+.btn-primary {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 0.9rem 2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.3s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.btn-ghost:hover { color: var(--text); }
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ======= HOME PAGE ======= */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 4rem 6rem;
+  position: relative;
+  z-index: 2;
+}
+.hero-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.hero-tag::before { content: ''; width: 2rem; height: 1px; background: var(--accent); }
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.2rem, 6vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+}
+h1 em { font-style: italic; color: var(--accent); }
+.hero-desc { font-size: 0.9rem; line-height: 2; color: var(--text-muted); max-width: 400px; margin-bottom: 3rem; }
+.hero-actions { display: flex; gap: 1.5rem; align-items: center; }
+.hero-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.hero-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 70%);
+}
+.chart-svg {
+  width: 88%;
+  max-width: 480px;
+  opacity: 0;
+  animation: fadeInUp 1s ease 0.4s forwards;
+}
+.chart-line {
+  fill: none; stroke: var(--accent); stroke-width: 2;
+  stroke-dasharray: 700; stroke-dashoffset: 700;
+  animation: drawLine 2.2s ease 0.7s forwards;
+}
+.chart-area { fill: url(#areaGrad); opacity: 0; animation: fadeIn 1s ease 2.2s forwards; }
+@keyframes drawLine { to { stroke-dashoffset: 0; } }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+/* HOME: FEATURED */
+.section-pad { padding: 5rem 4rem; }
+.articles-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 3rem;
+}
+.article-card {
+  background: var(--bg);
+  padding: 2.2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.article-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 0; height: 2px; background: var(--accent);
+  transition: width 0.4s ease;
+}
+.article-card:hover { background: var(--bg2); }
+.article-card:hover::after { width: 100%; }
+.article-card.featured {
+  grid-row: span 2;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: 380px;
+  background: linear-gradient(to top, rgba(10,10,8,0.95) 45%, rgba(10,10,8,0.3)), #1a1a18;
+}
+.card-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 0.7rem;
+}
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem; font-weight: 400; line-height: 1.3;
+  margin-bottom: 0.8rem; color: var(--text);
+}
+.article-card.featured .card-title { font-size: 1.9rem; }
+.card-desc { font-size: 0.82rem; line-height: 1.85; color: var(--text-muted); margin-bottom: 1.2rem; }
+.card-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; color: var(--text-dim);
+  letter-spacing: 0.1em; display: flex; gap: 0.8rem;
+}
+
+/* HOME: QUICK TOPICS */
+.topics-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 3rem;
+}
+.topic-chip {
+  background: var(--bg);
+  padding: 1.8rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-align: center;
+}
+.topic-chip:hover { background: var(--bg2); }
+.topic-chip-icon { font-size: 1.4rem; display: block; margin-bottom: 0.8rem; }
+.topic-chip-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+
+/* ======= MARKET PAGE ======= */
+.market-hero {
+  padding: 7rem 4rem 3rem;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+.market-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 2.5rem;
+}
+.mh-card {
+  background: var(--bg2);
+  padding: 2rem;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+.mh-card:hover { background: var(--bg3); }
+.mh-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+.mh-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 300;
+  margin-bottom: 0.2rem;
+}
+.mh-change { font-family: 'DM Mono', monospace; font-size: 0.72rem; }
+.mh-spark { margin-top: 1.2rem; height: 38px; }
+
+/* MARKET TABS */
+.market-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 0 4rem;
+  background: var(--bg2);
+}
+.market-tab {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--text-muted);
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  background: none; border-top: none; border-left: none; border-right: none;
+}
+.market-tab:hover { color: var(--text); }
+.market-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.market-content { padding: 3rem 4rem 5rem; }
+
+/* INDICES TABLE */
+.indices-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 3rem;
+}
+.indices-table thead tr {
+  border-bottom: 1px solid var(--border);
+}
+.indices-table th {
+  font-size: 0.6rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--accent);
+  padding: 0.8rem 1rem; text-align: left;
+  font-weight: 400;
+}
+.indices-table th:not(:first-child) { text-align: right; }
+.indices-table td {
+  padding: 1.1rem 1rem;
+  font-size: 0.8rem; color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.indices-table td:not(:first-child) { text-align: right; }
+.indices-table tbody tr { transition: background 0.2s; cursor: pointer; }
+.indices-table tbody tr:hover { background: var(--bg2); }
+.idx-name { color: var(--text-muted); font-size: 0.62rem; display: block; }
+
+/* SECTOR HEATMAP */
+.heatmap-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  margin-bottom: 3rem;
+}
+.hm-cell {
+  padding: 1.5rem 1rem;
+  position: relative;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+.hm-cell:hover { filter: brightness(1.2); }
+.hm-sector {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 0.4rem;
+}
+.hm-pct {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 300;
+}
+
+/* FOREX / COMMODITIES GRID */
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+.market-sub-table {
+  border: 1px solid var(--border);
+}
+.mst-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--accent);
+}
+.mst-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0.9rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s; cursor: pointer;
+}
+.mst-row:last-child { border-bottom: none; }
+.mst-row:hover { background: var(--bg2); }
+.mst-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text); }
+.mst-sub { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text-dim); }
+.mst-val { font-family: 'DM Mono', monospace; font-size: 0.78rem; text-align: right; }
+.mst-chg { font-family: 'DM Mono', monospace; font-size: 0.7rem; text-align: right; }
+
+/* CRYPTO TABLE */
+.crypto-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.crypto-card {
+  background: var(--bg);
+  padding: 1.8rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.crypto-card:hover { background: var(--bg2); }
+.crypto-name { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; }
+.crypto-val { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; margin-bottom: 0.3rem; }
+.crypto-chg { font-family: 'DM Mono', monospace; font-size: 0.72rem; margin-bottom: 1rem; }
+.crypto-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.crypto-bar-fill { height: 100%; border-radius: 2px; }
+
+/* ======= ARTICLE PAGE ======= */
+.article-page { padding: 7rem 0 5rem; }
+.article-header {
+  padding: 0 4rem 4rem;
+  border-bottom: 1px solid var(--border);
+  max-width: 900px;
+}
+.article-breadcrumb {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--text-dim);
+  margin-bottom: 2rem;
+  display: flex; gap: 0.8rem; align-items: center;
+}
+.article-breadcrumb span { cursor: pointer; transition: color 0.2s; }
+.article-breadcrumb span:hover { color: var(--accent); }
+.article-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 1.2rem;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.article-cat::before { content: ''; width: 1.5rem; height: 1px; background: var(--accent); }
+.article-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 300; line-height: 1.15;
+  letter-spacing: -0.02em; margin-bottom: 1.5rem;
+}
+.article-subtitle {
+  font-size: 1rem; line-height: 1.85;
+  color: var(--text-muted); margin-bottom: 2rem;
+  max-width: 700px;
+}
+.article-meta-bar {
+  display: flex; align-items: center; gap: 2rem;
+  padding-top: 1.5rem; border-top: 1px solid var(--border);
+}
+.author-info { display: flex; align-items: center; gap: 1rem; }
+.author-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--accent);
+}
+.author-name { font-size: 0.82rem; color: var(--text); margin-bottom: 0.1rem; }
+.author-role { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text-dim); letter-spacing: 0.1em; }
+.article-stats {
+  display: flex; gap: 1.5rem; margin-left: auto;
+}
+.article-stat {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; color: var(--text-dim);
+  letter-spacing: 0.1em; text-align: center;
+}
+.article-stat strong { display: block; color: var(--text-muted); font-size: 0.78rem; margin-bottom: 0.1rem; }
+
+/* ARTICLE BODY */
+.article-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 4rem;
+  padding: 4rem 4rem 5rem;
+  align-items: start;
+  max-width: 1200px;
+}
+.article-body h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; font-weight: 400;
+  margin: 2.5rem 0 1rem;
+  color: var(--text);
+}
+.article-body p {
+  font-size: 0.95rem; line-height: 2.1;
+  color: var(--text-muted); margin-bottom: 1.4rem;
+}
+.article-body strong { color: var(--text); font-weight: 400; }
+.article-pullquote {
+  border-left: 3px solid var(--accent);
+  padding: 1.5rem 2rem;
+  margin: 2.5rem 0;
+  background: var(--bg2);
+}
+.article-pullquote p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; font-weight: 300;
+  font-style: italic; line-height: 1.6;
+  color: var(--text); margin: 0;
+}
+.article-data-box {
+  border: 1px solid var(--border);
+  padding: 2rem;
+  margin: 2.5rem 0;
+  background: var(--bg2);
+}
+.data-box-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+.data-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.7rem 0; border-bottom: 1px solid var(--border);
+}
+.data-row:last-child { border-bottom: none; }
+.data-label { font-size: 0.82rem; color: var(--text-muted); }
+.data-val { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: var(--text); }
+.article-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 3rem 0 2rem; }
+.tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-dim);
+  border: 1px solid var(--border); padding: 0.3rem 0.8rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.tag:hover { border-color: var(--accent); color: var(--accent); }
+
+/* SIDEBAR */
+.article-sidebar { position: sticky; top: 80px; }
+.sidebar-toc {
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.sidebar-toc-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 1rem;
+}
+.toc-item {
+  font-size: 0.8rem; color: var(--text-muted);
+  padding: 0.4rem 0; cursor: pointer;
+  border-left: 2px solid var(--border);
+  padding-left: 0.8rem; transition: all 0.2s;
+  display: block; margin-bottom: 0.3rem;
+}
+.toc-item:hover, .toc-item.active { color: var(--accent); border-left-color: var(--accent); }
+.sidebar-related { border: 1px solid var(--border); }
+.sidebar-related-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--accent);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.related-item {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background 0.2s;
+}
+.related-item:last-child { border-bottom: none; }
+.related-item:hover { background: var(--bg2); }
+.related-cat { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+.related-title { font-size: 0.82rem; line-height: 1.5; color: var(--text-muted); }
+
+/* ======= THEME PAGE ======= */
+.theme-hero {
+  padding: 7rem 4rem 4rem;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.theme-hero::before {
+  content: attr(data-icon);
+  position: absolute; right: 4rem; top: 50%;
+  transform: translateY(-50%);
+  font-size: 14rem; opacity: 0.04;
+  pointer-events: none;
+}
+.theme-nav {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  padding: 0 4rem;
+  scrollbar-width: none;
+}
+.theme-nav::-webkit-scrollbar { display: none; }
+.theme-nav-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-muted);
+  padding: 1rem 1.5rem;
+  cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  background: none; border-top: none; border-left: none; border-right: none;
+  flex-shrink: 0;
+}
+.theme-nav-btn:hover { color: var(--text); }
+.theme-nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.theme-body { padding: 3rem 4rem 6rem; }
+
+/* Theme detail content */
+.theme-overview {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+}
+.theme-desc { font-size: 0.95rem; line-height: 2.1; color: var(--text-muted); }
+.theme-stats-box { border: 1px solid var(--border); padding: 2rem; }
+.theme-stats-box-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem;
+}
+.theme-stat-row {
+  display: flex; justify-content: space-between;
+  padding: 0.7rem 0; border-bottom: 1px solid var(--border);
+  font-family: 'DM Mono', monospace; font-size: 0.72rem;
+}
+.theme-stat-row:last-child { border-bottom: none; }
+.ts-label { color: var(--text-muted); }
+.ts-val { color: var(--text); }
+
+/* Theme article list */
+.theme-articles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 4rem;
+}
+.theme-article-card {
+  background: var(--bg);
+  padding: 2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.theme-article-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 0; height: 2px; background: var(--accent);
+  transition: width 0.4s;
+}
+.theme-article-card:hover { background: var(--bg2); }
+.theme-article-card:hover::after { width: 100%; }
+.tac-level {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem; border: 1px solid;
+  display: inline-block; margin-bottom: 1rem;
+}
+.level-beginner { color: var(--green); border-color: var(--green); }
+.level-intermediate { color: var(--accent); border-color: var(--accent); }
+.level-advanced { color: var(--blue); border-color: var(--blue); }
+
+/* SCREENER */
+.screener-box {
+  border: 1px solid var(--border);
+  margin-bottom: 4rem;
+}
+.screener-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.screener-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--accent);
+}
+.screener-filters { display: flex; gap: 1rem; }
+.screener-filter {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  color: var(--text-muted); background: var(--bg);
+  border: 1px solid var(--border); padding: 0.35rem 0.8rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.screener-filter:hover, .screener-filter.active { border-color: var(--accent); color: var(--accent); }
+.screener-table { width: 100%; border-collapse: collapse; }
+.screener-table th {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--text-dim);
+  padding: 0.8rem 2rem; text-align: left; border-bottom: 1px solid var(--border);
+  font-weight: 400;
+}
+.screener-table th:not(:first-child):not(:nth-child(2)) { text-align: right; }
+.screener-table td {
+  padding: 1rem 2rem;
+  font-family: 'DM Mono', monospace; font-size: 0.75rem;
+  color: var(--text); border-bottom: 1px solid var(--border);
+}
+.screener-table td:not(:first-child):not(:nth-child(2)) { text-align: right; }
+.screener-table tbody tr { cursor: pointer; transition: background 0.2s; }
+.screener-table tbody tr:hover { background: var(--bg2); }
+.screener-table tbody tr:last-child td { border-bottom: none; }
+.stock-name { font-size: 0.88rem; color: var(--text); margin-bottom: 0.15rem; }
+.stock-code { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text-dim); }
+
+/* NEWSLETTER BAR */
+.nl-bar {
+  background: var(--bg3);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 4rem;
+  display: flex; align-items: center; gap: 4rem;
+}
+.nl-bar-text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; font-weight: 300; margin-bottom: 0.3rem;
+}
+.nl-bar-text p { font-size: 0.85rem; color: var(--text-muted); }
+.nl-bar-form { display: flex; gap: 0; flex: 1; max-width: 500px; }
+.nl-input {
+  flex: 1; background: var(--bg);
+  border: 1px solid var(--border); border-right: none;
+  padding: 0.9rem 1.2rem; color: var(--text);
+  font-family: 'DM Mono', monospace; font-size: 0.75rem;
+  outline: none; transition: border-color 0.3s;
+}
+.nl-input:focus { border-color: var(--accent); }
+.nl-input::placeholder { color: var(--text-dim); }
+
+/* FOOTER */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 4rem;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+.footer-desc { font-size: 0.82rem; line-height: 1.85; color: var(--text-muted); margin-top: 0.8rem; }
+.footer-col h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 1.2rem;
+}
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 0.6rem; }
+.footer-col a { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; cursor: pointer; }
+.footer-col a:hover { color: var(--text); }
+.footer-bottom {
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 1.2rem 4rem; display: flex; justify-content: space-between; align-items: center;
+}
+.footer-bottom p { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.1em; }
+.disclaimer {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--text-dim);
+  text-align: center; padding: 1rem 4rem 2rem; line-height: 1.8; max-width: 800px; margin: 0 auto;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ======= NAV ======= -->
+<nav id="navbar">
+  <div class="nav-top">
+    <a class="logo" onclick="showPage('home')">NISHITAL <span>LENS</span></a>
+
+    <ul class="nav-main-links">
+      <!-- 記事 -->
+      <li class="nav-item">
+        <a>記事 <span class="arrow">▾</span></a>
+        <div class="mega-menu">
+          <div class="mega-grid">
+            <div class="mega-col">
+              <h5>国内株式</h5>
+              <ul>
+                <li><a onclick="showArticle()">日銀政策と株式市場</a></li>
+                <li><a>日経平均分析</a></li>
+                <li><a>中小型株特集</a></li>
+                <li><a>配当株ランキング</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h5>米国・海外株</h5>
+              <ul>
+                <li><a>S&amp;P500展望</a></li>
+                <li><a>AI・テック銘柄</a></li>
+                <li><a>新興国ETF</a></li>
+                <li><a>欧州市場動向</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h5>マクロ・経済</h5>
+              <ul>
+                <li><a>FRB政策分析</a></li>
+                <li><a>インフレ動向</a></li>
+                <li><a>為替戦略</a></li>
+                <li><a>商品市場</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- マーケット -->
+      <li class="nav-item">
+        <a onclick="showPage('market')">マーケット <span class="arrow">▾</span></a>
+        <div class="mega-menu">
+          <div class="mega-grid">
+            <div class="mega-col">
+              <h5>株式指数</h5>
+              <ul>
+                <li><a onclick="showPage('market')">日経225 / TOPIX</a></li>
+                <li><a onclick="showPage('market')">米国主要指数</a></li>
+                <li><a onclick="showPage('market')">欧州・アジア</a></li>
+                <li><a onclick="showPage('market')">セクター別</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h5>為替・商品</h5>
+              <ul>
+                <li><a onclick="showPage('market')">USD/JPY・EUR/JPY</a></li>
+                <li><a onclick="showPage('market')">金・原油・銀</a></li>
+                <li><a onclick="showPage('market')">農産物</a></li>
+                <li><a onclick="showPage('market')">VIX 恐怖指数</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h5>暗号資産</h5>
+              <ul>
+                <li><a onclick="showPage('market')">BTC / ETH</a></li>
+                <li><a onclick="showPage('market')">アルトコイン</a></li>
+                <li><a onclick="showPage('market')">DeFi指標</a></li>
+                <li><a onclick="showPage('market')">オンチェーン分析</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- テーマ -->
+      <li class="nav-item">
+        <a onclick="showPage('theme')">テーマ <span class="arrow">▾</span></a>
+        <div class="mega-menu">
+          <div class="mega-grid">
+            <div class="mega-col">
+              <h5>アセットクラス</h5>
+              <ul>
+                <li><a onclick="showTheme('株式分析')">株式分析</a></li>
+                <li><a onclick="showTheme('不動産・REIT')">不動産・REIT</a></li>
+                <li><a onclick="showTheme('暗号資産')">暗号資産</a></li>
+                <li><a onclick="showTheme('債券')">債券・固定利付</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h5>投資スタイル</h5>
+              <ul>
+                <li><a onclick="showTheme('バリュー投資')">バリュー投資</a></li>
+                <li><a onclick="showTheme('成長株')">成長株投資</a></li>
+                <li><a onclick="showTheme('配当投資')">配当・インカム</a></li>
+                <li><a onclick="showTheme('インデックス')">インデックス投資</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h5>ライフスタイル</h5>
+              <ul>
+                <li><a onclick="showTheme('NISA')">NISA 活用法</a></li>
+                <li><a onclick="showTheme('iDeCo')">iDeCo 戦略</a></li>
+                <li><a onclick="showTheme('新興国投資')">新興国投資</a></li>
+                <li><a onclick="showTheme('資産保全')">資産保全</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item"><a>学ぶ</a></li>
+      <li class="nav-item"><a>About</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <button class="nav-search">🔍</button>
+      <a class="nav-cta" onclick="document.getElementById('nl-section').scrollIntoView({behavior:'smooth'})">購読する</a>
+    </div>
+  </div>
+</nav>
+
+<!-- TICKER (shared) -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <div class="ticker-item"><span class="ticker-symbol">日経225</span><span class="ticker-price">38,452</span><span class="ticker-change up">▲+1.24%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">TOPIX</span><span class="ticker-price">2,714</span><span class="ticker-change up">▲+0.87%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">S&P500</span><span class="ticker-price">5,308</span><span class="ticker-change down">▼-0.31%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">NASDAQ</span><span class="ticker-price">16,742</span><span class="ticker-change down">▼-0.58%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">USD/JPY</span><span class="ticker-price">149.82</span><span class="ticker-change up">▲+0.43%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">BTC</span><span class="ticker-price">¥12,840,000</span><span class="ticker-change up">▲+3.21%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">Gold</span><span class="ticker-price">$2,384</span><span class="ticker-change up">▲+0.92%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">WTI原油</span><span class="ticker-price">$78.42</span><span class="ticker-change down">▼-1.10%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">EUR/JPY</span><span class="ticker-price">162.35</span><span class="ticker-change up">▲+0.22%</span></div>
+    <span class="ticker-sep">◆</span>
+    <!-- duplicate -->
+    <div class="ticker-item"><span class="ticker-symbol">日経225</span><span class="ticker-price">38,452</span><span class="ticker-change up">▲+1.24%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">TOPIX</span><span class="ticker-price">2,714</span><span class="ticker-change up">▲+0.87%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">S&P500</span><span class="ticker-price">5,308</span><span class="ticker-change down">▼-0.31%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">NASDAQ</span><span class="ticker-price">16,742</span><span class="ticker-change down">▼-0.58%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">USD/JPY</span><span class="ticker-price">149.82</span><span class="ticker-change up">▲+0.43%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">BTC</span><span class="ticker-price">¥12,840,000</span><span class="ticker-change up">▲+3.21%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">Gold</span><span class="ticker-price">$2,384</span><span class="ticker-change up">▲+0.92%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">WTI原油</span><span class="ticker-price">$78.42</span><span class="ticker-change down">▼-1.10%</span></div>
+    <span class="ticker-sep">◆</span>
+    <div class="ticker-item"><span class="ticker-symbol">EUR/JPY</span><span class="ticker-price">162.35</span><span class="ticker-change up">▲+0.22%</span></div>
+  </div>
+</div>
+
+<!-- ==================== HOME PAGE ==================== -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">このサイトはテストです</div>
+      <h1>資産を<em>育てる</em><br>知識がある</h1>
+      <p class="hero-desc">株式・債券・不動産・暗号資産。複雑な金融市場を、深い洞察と明快な分析でひもとく。あなたの投資判断を支える羅針盤。</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showArticle()">最新記事を読む</button>
+        <button class="btn-ghost" onclick="document.getElementById('nl-section').scrollIntoView({behavior:'smooth'})">無料購読 →</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <svg class="chart-svg" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <line x1="0" y1="60" x2="500" y2="60" stroke="#2a2a26" stroke-width="1"/>
+        <line x1="0" y1="120" x2="500" y2="120" stroke="#2a2a26" stroke-width="1"/>
+        <line x1="0" y1="180" x2="500" y2="180" stroke="#2a2a26" stroke-width="1"/>
+        <line x1="0" y1="240" x2="500" y2="240" stroke="#2a2a26" stroke-width="1"/>
+        <text x="10" y="58" fill="#4a4840" font-family="monospace" font-size="10">40,000</text>
+        <text x="10" y="118" fill="#4a4840" font-family="monospace" font-size="10">35,000</text>
+        <text x="10" y="178" fill="#4a4840" font-family="monospace" font-size="10">30,000</text>
+        <path class="chart-area" d="M0,200 C50,190 80,180 120,160 C160,140 180,150 220,130 C260,110 280,120 320,100 C360,80 380,90 420,70 C440,60 470,55 500,45 L500,300 L0,300 Z"/>
+        <path class="chart-line" d="M0,200 C50,190 80,180 120,160 C160,140 180,150 220,130 C260,110 280,120 320,100 C360,80 380,90 420,70 C440,60 470,55 500,45"/>
+        <circle cx="500" cy="45" r="4" fill="#c9a84c" opacity="0" style="animation:fadeIn 0.3s ease 3s forwards"/>
+        <rect x="418" y="20" width="75" height="22" fill="#c9a84c" opacity="0" style="animation:fadeIn 0.3s ease 3s forwards" rx="1"/>
+        <text x="455" y="35" fill="#0a0a08" font-family="monospace" font-size="11" text-anchor="middle" font-weight="bold" opacity="0" style="animation:fadeIn 0.3s ease 3s forwards">+18.4%</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- FEATURED ARTICLES -->
+  <section class="section-pad">
+    <div class="section-label">最新記事</div>
+    <h2>今週のハイライト</h2>
+    <div class="articles-grid fade-up">
+      <div class="article-card featured" onclick="showArticle()">
+        <span class="card-cat">特集 · 日本株</span>
+        <div class="card-title">日銀の政策転換がもたらす<br>新時代の投資戦略</div>
+        <p class="card-desc">利上げサイクル突入で変わる債券・株式の相関関係。資産配分を見直すべき理由とその方法論。</p>
+        <div class="card-meta"><span>2026.02.18</span><span>·</span><span>12 min</span></div>
+      </div>
+      <div class="article-card" onclick="showArticle()">
+        <span class="card-cat">米国株</span>
+        <div class="card-title">Magnificent 7の次を探す: AI後期サイクルの勝者</div>
+        <div class="card-meta"><span>2026.02.18</span><span>·</span><span>8 min</span></div>
+      </div>
+      <div class="article-card" onclick="showArticle()">
+        <span class="card-cat">不動産</span>
+        <div class="card-title">REITで始める不動産投資 — 少額から始める利回り生活</div>
+        <div class="card-meta"><span>2026.02.18</span><span>·</span><span>6 min</span></div>
+      </div>
+      <div class="article-card" onclick="showArticle()">
+        <span class="card-cat">マクロ経済</span>
+        <div class="card-title">FRBの利下げ織り込みと新興国市場への資金流入</div>
+        <div class="card-meta"><span>2026.02.18</span><span>·</span><span>9 min</span></div>
+      </div>
+      <div class="article-card" onclick="showArticle()">
+        <span class="card-cat">暗号資産</span>
+        <div class="card-title">ビットコインETF承認後の機関投資家動向を読む</div>
+        <div class="card-meta"><span>2026.02.18</span><span>·</span><span>7 min</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOPIC CHIPS -->
+  <section class="section-pad" style="padding-top:0">
+    <div class="section-label">テーマから探す</div>
+    <div class="topics-row fade-up">
+      <div class="topic-chip" onclick="showTheme('株式分析')"><span class="topic-chip-icon">📊</span><div class="topic-chip-name">株式分析</div></div>
+      <div class="topic-chip" onclick="showTheme('不動産・REIT')"><span class="topic-chip-icon">🏦</span><div class="topic-chip-name">不動産・REIT</div></div>
+      <div class="topic-chip" onclick="showTheme('暗号資産')"><span class="topic-chip-icon">₿</span><div class="topic-chip-name">暗号資産</div></div>
+      <div class="topic-chip" onclick="showTheme('NISA')"><span class="topic-chip-icon">🛡️</span><div class="topic-chip-name">NISA/iDeCo</div></div>
+      <div class="topic-chip" onclick="showTheme('新興国投資')"><span class="topic-chip-icon">🌏</span><div class="topic-chip-name">新興国</div></div>
+      <div class="topic-chip" onclick="showPage('market')"><span class="topic-chip-icon">📈</span><div class="topic-chip-name">マーケット</div></div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <div class="nl-bar fade-up" id="nl-section">
+    <div class="nl-bar-text">
+      <h3>毎朝7時、相場の本質を</h3>
+      <p>ノイズを除去した市場レポートと週次の深掘り分析。無料購読、解除はいつでも。</p>
+    </div>
+    <div class="nl-bar-form">
+      <input class="nl-input" type="email" placeholder="メールアドレスを入力">
+      <button class="btn-primary">購読する</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <a class="logo" onclick="showPage('home')">CAPITAL <span>LENS</span></a>
+      <p class="footer-desc">投資の本質を、深く、わかりやすく。個人投資家のための独立系金融メディア。</p>
+    </div>
+    <div class="footer-col">
+      <h4>カテゴリ</h4>
+      <ul>
+        <li><a onclick="showTheme('株式分析')">株式分析</a></li>
+        <li><a onclick="showTheme('不動産・REIT')">不動産・REIT</a></li>
+        <li><a onclick="showTheme('暗号資産')">暗号資産</a></li>
+        <li><a onclick="showTheme('NISA')">NISA/iDeCo</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>コンテンツ</h4>
+      <ul>
+        <li><a onclick="showArticle()">最新記事</a></li>
+        <li><a onclick="showPage('market')">マーケット</a></li>
+        <li><a>週次レポート</a></li>
+        <li><a>初心者ガイド</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>メディア</h4>
+      <ul>
+        <li><a>About</a></li>
+        <li><a>Instagram (_04.124)</a></li>
+        <li><a>--</a></li>
+        <li><a>お問い合わせ</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>© 2024 CAPITAL LENS. All rights reserved.</p>
+    <p>最終更新: 2026.02.18 023:00 JST</p>
+  </div>
+  <p class="disclaimer">※ 本サイトはテスト用です。また情報は教育・情報提供を目的としており、特定の金融商品への投資を勧誘するものではありません。投資に際しては自己責任のもと、必要に応じて専門家にご相談ください。</p>
+</div>
+
+<!-- ==================== MARKET PAGE ==================== -->
+<div class="page" id="page-market">
+  <div class="market-hero">
+    <div class="section-label">マーケット概況</div>
+    <h2>主要指標ダッシュボード</h2>
+    <p style="color:var(--text-muted);font-size:0.88rem;margin-top:0.5rem">最終更新: 2024.02.15 15:30 JST</p>
+    <div class="market-hero-grid">
+      <div class="mh-card">
+        <div class="mh-name">日経平均</div>
+        <div class="mh-val up">38,452.08</div>
+        <div class="mh-change up">▲ +468.41 (+1.24%)</div>
+        <svg class="mh-spark" viewBox="0 0 100 38"><polyline points="0,35 15,30 30,32 45,20 60,15 75,18 90,8 100,5" fill="none" stroke="#4caa6e" stroke-width="1.5"/></svg>
+      </div>
+      <div class="mh-card">
+        <div class="mh-name">S&P 500</div>
+        <div class="mh-val down">5,308.15</div>
+        <div class="mh-change down">▼ -16.52 (-0.31%)</div>
+        <svg class="mh-spark" viewBox="0 0 100 38"><polyline points="0,10 15,8 30,12 45,9 60,15 75,12 90,18 100,22" fill="none" stroke="#c94c4c" stroke-width="1.5"/></svg>
+      </div>
+      <div class="mh-card">
+        <div class="mh-name">USD/JPY</div>
+        <div class="mh-val up">149.82</div>
+        <div class="mh-change up">▲ +0.64 (+0.43%)</div>
+        <svg class="mh-spark" viewBox="0 0 100 38"><polyline points="0,28 15,22 30,28 45,20 60,18 75,15 90,12 100,10" fill="none" stroke="#4caa6e" stroke-width="1.5"/></svg>
+      </div>
+      <div class="mh-card">
+        <div class="mh-name">BTC/JPY</div>
+        <div class="mh-val up">¥12,840,000</div>
+        <div class="mh-change up">▲ +3.21%</div>
+        <svg class="mh-spark" viewBox="0 0 100 38"><polyline points="0,32 15,28 30,20 45,25 60,15 75,8 90,10 100,5" fill="none" stroke="#4caa6e" stroke-width="1.5"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="market-tabs">
+    <button class="market-tab active" onclick="switchMarketTab(this,'indices')">株式指数</button>
+    <button class="market-tab" onclick="switchMarketTab(this,'forex')">為替・商品</button>
+    <button class="market-tab" onclick="switchMarketTab(this,'crypto')">暗号資産</button>
+    <button class="market-tab" onclick="switchMarketTab(this,'sectors')">セクター</button>
+  </div>
+
+  <div class="market-content">
+
+    <!-- INDICES TAB -->
+    <div id="tab-indices">
+      <table class="indices-table">
+        <thead>
+          <tr>
+            <th>指数名</th>
+            <th>現在値</th>
+            <th>前日比</th>
+            <th>騰落率</th>
+            <th>52週高値</th>
+            <th>52週安値</th>
+            <th>YTD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>日経225</strong><span class="idx-name">日本</span></td>
+            <td>38,452.08</td>
+            <td class="up">+468.41</td>
+            <td class="up">+1.24%</td>
+            <td>40,109.23</td>
+            <td>30,487.12</td>
+            <td class="up">+14.2%</td>
+          </tr>
+          <tr>
+            <td><strong>TOPIX</strong><span class="idx-name">東証全体</span></td>
+            <td>2,714.33</td>
+            <td class="up">+23.41</td>
+            <td class="up">+0.87%</td>
+            <td>2,813.22</td>
+            <td>2,192.18</td>
+            <td class="up">+12.8%</td>
+          </tr>
+          <tr>
+            <td><strong>S&P 500</strong><span class="idx-name">米国</span></td>
+            <td>5,308.15</td>
+            <td class="down">-16.52</td>
+            <td class="down">-0.31%</td>
+            <td>5,264.85</td>
+            <td>4,103.78</td>
+            <td class="up">+8.9%</td>
+          </tr>
+          <tr>
+            <td><strong>NASDAQ</strong><span class="idx-name">米国 テック</span></td>
+            <td>16,742.39</td>
+            <td class="down">-98.02</td>
+            <td class="down">-0.58%</td>
+            <td>16,538.86</td>
+            <td>12,405.20</td>
+            <td class="up">+10.2%</td>
+          </tr>
+          <tr>
+            <td><strong>DOW JONES</strong><span class="idx-name">米国 ブルーチップ</span></td>
+            <td>39,122.45</td>
+            <td class="up">+88.67</td>
+            <td class="up">+0.23%</td>
+            <td>38,654.42</td>
+            <td>32,417.59</td>
+            <td class="up">+5.1%</td>
+          </tr>
+          <tr>
+            <td><strong>DAX</strong><span class="idx-name">ドイツ</span></td>
+            <td>17,632.19</td>
+            <td class="up">+134.22</td>
+            <td class="up">+0.77%</td>
+            <td>17,003.28</td>
+            <td>14,458.39</td>
+            <td class="up">+7.4%</td>
+          </tr>
+          <tr>
+            <td><strong>FTSE 100</strong><span class="idx-name">英国</span></td>
+            <td>7,714.58</td>
+            <td class="down">-22.14</td>
+            <td class="down">-0.29%</td>
+            <td>7,769.14</td>
+            <td>7,206.82</td>
+            <td class="up">+2.1%</td>
+          </tr>
+          <tr>
+            <td><strong>上海総合</strong><span class="idx-name">中国</span></td>
+            <td>3,044.32</td>
+            <td class="up">+18.95</td>
+            <td class="up">+0.63%</td>
+            <td>3,418.95</td>
+            <td>2,702.19</td>
+            <td class="down">-4.8%</td>
+          </tr>
+          <tr>
+            <td><strong>SENSEX</strong><span class="idx-name">インド</span></td>
+            <td>72,623.09</td>
+            <td class="up">+312.45</td>
+            <td class="up">+0.43%</td>
+            <td>73,958.69</td>
+            <td>57,084.91</td>
+            <td class="up">+3.2%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FOREX/COMMODITY TAB (hidden by default) -->
+    <div id="tab-forex" style="display:none">
+      <div class="two-col-grid">
+        <div class="market-sub-table">
+          <div class="mst-header">主要通貨ペア</div>
+          <div class="mst-row"><div><div class="mst-label">USD/JPY</div><div class="mst-sub">ドル円</div></div><div class="mst-val">149.82</div><div class="mst-chg up">▲+0.43%</div></div>
+          <div class="mst-row"><div><div class="mst-label">EUR/JPY</div><div class="mst-sub">ユーロ円</div></div><div class="mst-val">162.35</div><div class="mst-chg up">▲+0.22%</div></div>
+          <div class="mst-row"><div><div class="mst-label">GBP/JPY</div><div class="mst-sub">ポンド円</div></div><div class="mst-val">190.14</div><div class="mst-chg down">▼-0.15%</div></div>
+          <div class="mst-row"><div><div class="mst-label">EUR/USD</div><div class="mst-sub">ユーロドル</div></div><div class="mst-val">1.0836</div><div class="mst-chg down">▼-0.18%</div></div>
+          <div class="mst-row"><div><div class="mst-label">AUD/JPY</div><div class="mst-sub">豪ドル円</div></div><div class="mst-val">98.72</div><div class="mst-chg up">▲+0.31%</div></div>
+          <div class="mst-row"><div><div class="mst-label">CNY/JPY</div><div class="mst-sub">人民元円</div></div><div class="mst-val">20.82</div><div class="mst-chg down">▼-0.08%</div></div>
+        </div>
+        <div class="market-sub-table">
+          <div class="mst-header">商品・コモディティ</div>
+          <div class="mst-row"><div><div class="mst-label">Gold</div><div class="mst-sub">金スポット</div></div><div class="mst-val">$2,384</div><div class="mst-chg up">▲+0.92%</div></div>
+          <div class="mst-row"><div><div class="mst-label">Silver</div><div class="mst-sub">銀スポット</div></div><div class="mst-val">$27.84</div><div class="mst-chg up">▲+1.14%</div></div>
+          <div class="mst-row"><div><div class="mst-label">WTI Crude</div><div class="mst-sub">原油</div></div><div class="mst-val">$78.42</div><div class="mst-chg down">▼-1.10%</div></div>
+          <div class="mst-row"><div><div class="mst-label">Brent</div><div class="mst-sub">北海ブレント</div></div><div class="mst-val">$83.15</div><div class="mst-chg down">▼-0.88%</div></div>
+          <div class="mst-row"><div><div class="mst-label">Copper</div><div class="mst-sub">銅</div></div><div class="mst-val">$3.82</div><div class="mst-chg up">▲+0.55%</div></div>
+          <div class="mst-row"><div><div class="mst-label">VIX</div><div class="mst-sub">恐怖指数</div></div><div class="mst-val">14.22</div><div class="mst-chg up">▲+0.38%</div></div>
+        </div>
+      </div>
+      <div class="two-col-grid">
+        <div class="market-sub-table">
+          <div class="mst-header">日米国債利回り</div>
+          <div class="mst-row"><div><div class="mst-label">日本国債10年</div></div><div class="mst-val">0.72%</div><div class="mst-chg up">▲+2bp</div></div>
+          <div class="mst-row"><div><div class="mst-label">日本国債30年</div></div><div class="mst-val">1.48%</div><div class="mst-chg up">▲+1bp</div></div>
+          <div class="mst-row"><div><div class="mst-label">米国債2年</div></div><div class="mst-val">4.61%</div><div class="mst-chg down">▼-3bp</div></div>
+          <div class="mst-row"><div><div class="mst-label">米国債10年</div></div><div class="mst-val">4.28%</div><div class="mst-chg down">▼-2bp</div></div>
+        </div>
+        <div class="market-sub-table">
+          <div class="mst-header">農産物</div>
+          <div class="mst-row"><div><div class="mst-label">トウモロコシ</div></div><div class="mst-val">$4.42</div><div class="mst-chg down">▼-0.45%</div></div>
+          <div class="mst-row"><div><div class="mst-label">大豆</div></div><div class="mst-val">$11.38</div><div class="mst-chg up">▲+0.18%</div></div>
+          <div class="mst-row"><div><div class="mst-label">小麦</div></div><div class="mst-val">$5.88</div><div class="mst-chg down">▼-0.22%</div></div>
+          <div class="mst-row"><div><div class="mst-label">砂糖</div></div><div class="mst-val">$0.237</div><div class="mst-chg up">▲+0.85%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRYPTO TAB (hidden) -->
+    <div id="tab-crypto" style="display:none">
+      <div class="crypto-grid" style="margin-bottom:2rem">
+        <div class="crypto-card">
+          <div class="crypto-name">Bitcoin</div>
+          <div class="crypto-val up">¥12,840,000</div>
+          <div class="crypto-chg up">▲ +3.21% (24h)</div>
+          <div class="crypto-bar"><div class="crypto-bar-fill" style="width:75%;background:var(--green)"></div></div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-name">Ethereum</div>
+          <div class="crypto-val up">¥532,000</div>
+          <div class="crypto-chg up">▲ +2.14% (24h)</div>
+          <div class="crypto-bar"><div class="crypto-bar-fill" style="width:62%;background:var(--green)"></div></div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-name">Solana</div>
+          <div class="crypto-val up">¥22,400</div>
+          <div class="crypto-chg up">▲ +5.82% (24h)</div>
+          <div class="crypto-bar"><div class="crypto-bar-fill" style="width:88%;background:var(--green)"></div></div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-name">BNB</div>
+          <div class="crypto-val down">¥57,200</div>
+          <div class="crypto-chg down">▼ -0.94% (24h)</div>
+          <div class="crypto-bar"><div class="crypto-bar-fill" style="width:45%;background:var(--red)"></div></div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-name">XRP</div>
+          <div class="crypto-val up">¥82</div>
+          <div class="crypto-chg up">▲ +1.32% (24h)</div>
+          <div class="crypto-bar"><div class="crypto-bar-fill" style="width:52%;background:var(--green)"></div></div>
+        </div>
+        <div class="crypto-card">
+          <div class="crypto-name">Avalanche</div>
+          <div class="crypto-val down">¥5,820</div>
+          <div class="crypto-chg down">▼ -2.18% (24h)</div>
+          <div class="crypto-bar"><div class="crypto-bar-fill" style="width:38%;background:var(--red)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTORS TAB (hidden) -->
+    <div id="tab-sectors" style="display:none">
+      <div class="heatmap-title">セクター別パフォーマンス</div>
+      <div class="heatmap-grid">
+        <div class="hm-cell" style="background:rgba(76,170,110,0.35)"><div class="hm-sector">テクノロジー</div><div class="hm-pct up">+2.84%</div></div>
+        <div class="hm-cell" style="background:rgba(76,170,110,0.25)"><div class="hm-sector">金融</div><div class="hm-pct up">+1.92%</div></div>
+        <div class="hm-cell" style="background:rgba(76,170,110,0.15)"><div class="hm-sector">ヘルスケア</div><div class="hm-pct up">+0.87%</div></div>
+        <div class="hm-cell" style="background:rgba(76,170,110,0.10)"><div class="hm-sector">エネルギー</div><div class="hm-pct up">+0.44%</div></div>
+        <div class="hm-cell" style="background:rgba(201,76,76,0.10)"><div class="hm-sector">素材</div><div class="hm-pct down">-0.31%</div></div>
+        <div class="hm-cell" style="background:rgba(201,76,76,0.18)"><div class="hm-sector">通信</div><div class="hm-pct down">-0.78%</div></div>
+        <div class="hm-cell" style="background:rgba(201,76,76,0.25)"><div class="hm-sector">不動産</div><div class="hm-pct down">-1.22%</div></div>
+        <div class="hm-cell" style="background:rgba(201,76,76,0.35)"><div class="hm-sector">公益</div><div class="hm-pct down">-2.05%</div></div>
+        <div class="hm-cell" style="background:rgba(76,170,110,0.20)"><div class="hm-sector">消費財</div><div class="hm-pct up">+1.12%</div></div>
+        <div class="hm-cell" style="background:rgba(76,170,110,0.08)"><div class="hm-sector">生活必需品</div><div class="hm-pct up">+0.28%</div></div>
+        <div class="hm-cell" style="background:rgba(201,76,76,0.08)"><div class="hm-sector">産業財</div><div class="hm-pct down">-0.18%</div></div>
+        <div class="hm-cell" style="background:rgba(76,126,201,0.20)"><div class="hm-sector">自動車</div><div class="hm-pct up" style="color:var(--blue)">+0.00%</div></div>
+      </div>
+    </div>
+
+  </div><!-- /market-content -->
+
+  <!-- NL + FOOTER -->
+  <div class="nl-bar">
+    <div class="nl-bar-text">
+      <h3>毎朝7時、相場の本質を</h3>
+      <p>ノイズを除去した市場レポートと週次の深掘り分析。無料購読、解除はいつでも。</p>
+    </div>
+    <div class="nl-bar-form">
+      <input class="nl-input" type="email" placeholder="メールアドレスを入力">
+      <button class="btn-primary">購読する</button>
+    </div>
+  </div>
+  <footer>
+    <div><a class="logo" onclick="showPage('home')">CAPITAL <span>LENS</span></a><p class="footer-desc">投資の本質を、深く、わかりやすく。</p></div>
+    <div class="footer-col"><h4>マーケット</h4><ul><li><a>株式指数</a></li><li><a>為替・商品</a></li><li><a>暗号資産</a></li><li><a>セクター</a></li></ul></div>
+    <div class="footer-col"><h4>コンテンツ</h4><ul><li><a onclick="showArticle()">最新記事</a></li><li><a onclick="showPage('home')">ホーム</a></li></ul></div>
+    <div class="footer-col"><h4>メディア</h4><ul><li><a>About</a></li><li><a>X (Twitter)</a></li></ul></div>
+  </footer>
+  <div class="footer-bottom"><p>© 2026 CAPITAL LENS.</p><p>2026.02.18 23:00 JST</p></div>
+  <p class="disclaimer">※ 本サイトはテスト用です。また情報は教育・情報提供を目的としており、投資勧誘ではありません。</p>
+</div>
+
+<!-- ==================== ARTICLE PAGE ==================== -->
+<div class="page" id="page-article">
+  <div class="article-page">
+    <div class="article-header">
+      <div class="article-breadcrumb">
+        <span onclick="showPage('home')">ホーム</span>
+        <span>›</span>
+        <span onclick="showTheme('株式分析')">日本株</span>
+        <span>›</span>
+        <span style="color:var(--text-muted)">日銀の政策転換がもたらす新時代の投資戦略</span>
+      </div>
+      <div class="article-cat">特集 · 日本株</div>
+      <h1 class="article-title">日銀の政策転換がもたらす<br>新時代の投資戦略</h1>
+      <p class="article-subtitle">利上げサイクル突入で変わる債券・株式の相関関係。資産配分を見直すべき理由と、個人投資家が今すぐ取れる具体的なアクション。</p>
+      <div class="article-meta-bar">
+        <div class="author-info">
+          <div class="author-avatar">K</div>
+          <div>
+            <div class="author-name">加藤 健太</div>
+            <div class="author-role">Chief Market Analyst</div>
+          </div>
+        </div>
+        <div class="article-stats">
+          <div class="article-stat"><strong>2026.02.18</strong>公開日</div>
+          <div class="article-stat"><strong>12 min</strong>読了時間</div>
+          <div class="article-stat"><strong>4,280</strong>閲覧数</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="article-layout">
+      <div class="article-body">
+        <h3>歴史的転換点に立つ日本の金融政策</h3>
+        <p>2024年3月、日本銀行はついにマイナス金利政策を解除し、17年ぶりの利上げに踏み切った。この決断は単なる金利変更にとどまらず、<strong>デフレ経済から正常化への構造転換</strong>を意味する。個人投資家にとって、ポートフォリオの根本的な見直しが求められる局面だ。</p>
+        <p>過去30年間、日本の投資家は「低金利・低インフレ・円安」という環境下で資産形成を行ってきた。しかしこのパラダイムが崩れつつある今、従来の「株式偏重・現金保有」という戦略は再考を迫られている。</p>
+
+        <div class="article-pullquote">
+          <p>「金利が動く時代とは、すべての資産価格の前提条件が変わる時代だ。準備した者と、準備しなかった者で、10年後の資産格差は計り知れない。」</p>
+        </div>
+
+        <h3>金利上昇が各アセットクラスに与える影響</h3>
+        <p>金利の上昇は、資産クラスごとに異なる影響をもたらす。最も直接的な影響を受けるのが<strong>債券市場</strong>だ。債券価格と金利は逆相関の関係にあるため、長期債を保有している投資家は含み損を抱えるリスクがある。</p>
+
+        <div class="article-data-box">
+          <div class="data-box-title">金利1%上昇時の資産別影響シミュレーション</div>
+          <div class="data-row"><span class="data-label">日本国債（10年）</span><span class="data-val down">-8.5〜-9.5%</span></div>
+          <div class="data-row"><span class="data-label">J-REIT（平均）</span><span class="data-val down">-10〜-15%</span></div>
+          <div class="data-row"><span class="data-label">銀行セクター株</span><span class="data-val up">+8〜+15%</span></div>
+          <div class="data-row"><span class="data-label">グロース株（高PER）</span><span class="data-val down">-15〜-25%</span></div>
+          <div class="data-row"><span class="data-label">バリュー株（低PBR）</span><span class="data-val up">+3〜+8%</span></div>
+          <div class="data-row"><span class="data-label">外貨建て資産（為替次第）</span><span class="data-val" style="color:var(--text-muted)">変動大</span></div>
+        </div>
+
+        <p>一方、<strong>金融セクター</strong>は利上げの恩恵を受ける代表格だ。銀行・保険会社は預貸金利差（NIM）の拡大によって収益改善が見込まれる。三菱UFJ、三井住友などのメガバンクは過去1年間で30〜50%の株価上昇を達成しており、この流れはしばらく続くと見られる。</p>
+
+        <h3>今すぐ見直すべきポートフォリオ配分</h3>
+        <p>では具体的にどのような配分変更が有効か。以下の3つの観点から考えてみよう。</p>
+        <p><strong>① 債券から株式へのリバランス：</strong>長期国債の保有比率を下げ、株式・特に金融・エネルギーセクターへの配分を増やす。ただし個別株リスクを取りたくない場合は、金融ETFや高配当株ETFが有効な代替手段となる。</p>
+        <p><strong>② 円建て資産の見直し：</strong>円高進行リスクを考慮し、外貨建て資産（米国株ETF、先進国債券ETF等）のヘッジ比率を検討する。全面的にヘッジするのではなく、一部をノーヘッジで保有することでインフレ対抗力を維持する戦略が現実的だ。</p>
+        <p><strong>③ インカム重視への転換：</strong>金利上昇環境では、キャピタルゲイン（値上がり益）よりも<strong>インカムゲイン（配当・利息）</strong>の重要性が増す。高配当日本株、個人向け国債（変動10年）の活用を積極的に検討すべきだ。</p>
+
+        <div class="article-data-box">
+          <div class="data-box-title">推奨ポートフォリオ例（積極型・40代）</div>
+          <div class="data-row"><span class="data-label">国内株式（高配当・バリュー中心）</span><span class="data-val">35%</span></div>
+          <div class="data-row"><span class="data-label">海外株式ETF（全世界・S&P500）</span><span class="data-val">30%</span></div>
+          <div class="data-row"><span class="data-label">個人向け国債（変動10年）</span><span class="data-val">15%</span></div>
+          <div class="data-row"><span class="data-label">REIT（国内・海外分散）</span><span class="data-val">10%</span></div>
+          <div class="data-row"><span class="data-label">金（ゴールドETF）</span><span class="data-val">5%</span></div>
+          <div class="data-row"><span class="data-label">現金・生活防衛費</span><span class="data-val">5%</span></div>
+        </div>
+
+        <h3>NISAを最大活用する戦略</h3>
+        <p>2024年からスタートした新NISAは、年間360万円（成長投資枠240万+つみたて枠120万）、生涯1,800万円まで非課税で運用できる強力な制度だ。金利上昇局面においては、この制度の活用優先度は以前にも増して高くなっている。</p>
+        <p>特に成長投資枠での<strong>高配当ETF（例：SBI日本高配当株式ETF）</strong>の活用は、インカムゲインを非課税で得ながら長期保有できる点で非常に有効だ。配当再投資の複利効果と合わせると、10年・20年スパンでの資産形成に大きなアドバンテージをもたらす。</p>
+
+        <div class="article-tags">
+          <span class="tag">日銀政策</span>
+          <span class="tag">金利</span>
+          <span class="tag">ポートフォリオ</span>
+          <span class="tag">NISA</span>
+          <span class="tag">高配当株</span>
+          <span class="tag">日本株</span>
+          <span class="tag">資産配分</span>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="article-sidebar">
+        <div class="sidebar-toc">
+          <div class="sidebar-toc-title">目次</div>
+          <a class="toc-item active">歴史的転換点に立つ日本の金融政策</a>
+          <a class="toc-item">金利上昇が各アセットに与える影響</a>
+          <a class="toc-item">今すぐ見直すべきポートフォリオ配分</a>
+          <a class="toc-item">NISAを最大活用する戦略</a>
+        </div>
+        <div class="sidebar-related">
+          <div class="sidebar-related-title">関連記事</div>
+          <div class="related-item" onclick="showArticle()">
+            <div class="related-cat">米国株</div>
+            <div class="related-title">AI後期サイクルの勝者銘柄を探す</div>
+          </div>
+          <div class="related-item" onclick="showArticle()">
+            <div class="related-cat">NISA</div>
+            <div class="related-title">新NISA完全ガイド 2024年版</div>
+          </div>
+          <div class="related-item" onclick="showArticle()">
+            <div class="related-cat">マクロ</div>
+            <div class="related-title">円安は終わるのか? 為替シナリオ分析</div>
+          </div>
+          <div class="related-item" onclick="showArticle()">
+            <div class="related-cat">高配当</div>
+            <div class="related-title">配当利回り4%超、厳選10銘柄</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nl-bar">
+    <div class="nl-bar-text"><h3>毎朝7時、相場の本質を</h3><p>無料のニュースレターで最新分析をお届け。</p></div>
+    <div class="nl-bar-form"><input class="nl-input" type="email" placeholder="メールアドレスを入力"><button class="btn-primary">購読する</button></div>
+  </div>
+  <footer>
+    <div><a class="logo" onclick="showPage('home')">CAPITAL <span>LENS</span></a><p class="footer-desc">投資の本質を、深く、わかりやすく。</p></div>
+    <div class="footer-col"><h4>カテゴリ</h4><ul><li><a onclick="showTheme('株式分析')">株式分析</a></li><li><a onclick="showTheme('NISA')">NISA/iDeCo</a></li><li><a onclick="showTheme('暗号資産')">暗号資産</a></li></ul></div>
+    <div class="footer-col"><h4>コンテンツ</h4><ul><li><a onclick="showPage('home')">ホーム</a></li><li><a onclick="showPage('market')">マーケット</a></li></ul></div>
+    <div class="footer-col"><h4>メディア</h4><ul><li><a>About</a></li><li><a>X (Twitter)</a></li></ul></div>
+  </footer>
+  <div class="footer-bottom"><p>© 2026 CAPITAL LENS.</p></div>
+  <p class="disclaimer">※ 投資に関する情報は参考目的のみです。実際の投資判断は自己責任でお願いします。</p>
+</div>
+
+<!-- ==================== THEME PAGE ==================== -->
+<div class="page" id="page-theme">
+  <div class="theme-hero" id="theme-hero-area" data-icon="📊">
+    <div class="section-label" id="theme-breadcrumb-label">テーマ</div>
+    <h2 id="theme-title">株式分析</h2>
+    <p id="theme-desc-short" style="color:var(--text-muted);font-size:0.9rem;margin-top:0.5rem;max-width:600px">国内外の個別株・ETFを徹底分析。財務諸表の読み方からバリュエーション手法まで。</p>
+  </div>
+
+  <div class="theme-nav">
+    <button class="theme-nav-btn active" onclick="switchThemeTab(this,'overview')">概要</button>
+    <button class="theme-nav-btn" onclick="switchThemeTab(this,'articles')">記事一覧</button>
+    <button class="theme-nav-btn" onclick="switchThemeTab(this,'screener')">銘柄スクリーナー</button>
+    <button class="theme-nav-btn" onclick="switchThemeTab(this,'guide')">入門ガイド</button>
+  </div>
+
+  <div class="theme-body">
+
+    <!-- OVERVIEW TAB -->
+    <div id="theme-tab-overview">
+      <div class="theme-overview">
+        <div>
+          <div class="section-label" style="margin-bottom:1.5rem">このテーマについて</div>
+          <div class="theme-desc" id="theme-long-desc">
+            <p style="margin-bottom:1rem">株式投資は、企業の所有権の一部を購入し、その成長と利益から恩恵を受ける投資手法です。短期トレードから長期バイ&ホールドまで幅広いアプローチが存在し、個人の目標・リスク許容度に合わせた戦略選択が重要です。</p>
+            <p style="margin-bottom:1rem">CAPITAL LENSでは、国内外の個別銘柄の定量・定性分析、マクロ環境と株式市場の連動性分析、セクターローテーション戦略など、多角的な視点からの情報を発信しています。</p>
+            <p>初心者向けのPER・PBR解説から、プロ投資家向けのDCFモデル構築まで、レベルを問わず実践的なコンテンツをご提供します。</p>
+          </div>
+        </div>
+        <div class="theme-stats-box">
+          <div class="theme-stats-box-title">テーマ指標</div>
+          <div class="theme-stat-row"><span class="ts-label">記事数</span><span class="ts-val">142本</span></div>
+          <div class="theme-stat-row"><span class="ts-label">月間閲覧数</span><span class="ts-val">82,000+</span></div>
+          <div class="theme-stat-row"><span class="ts-label">カバー銘柄数</span><span class="ts-val">320+</span></div>
+          <div class="theme-stat-row"><span class="ts-label">最終更新</span><span class="ts-val">2024.02.15</span></div>
+          <div class="theme-stat-row"><span class="ts-label">難易度</span><span class="ts-val">初級〜上級</span></div>
+        </div>
+      </div>
+
+      <!-- SUB-TOPICS -->
+      <div class="section-label" style="margin-bottom:1.5rem">サブトピック</div>
+      <div class="topics-row" style="margin-bottom:3rem">
+        <div class="topic-chip" onclick="switchThemeTab(document.querySelector('.theme-nav-btn:nth-child(2)'),'articles')"><span class="topic-chip-icon">📈</span><div class="topic-chip-name">日本株</div></div>
+        <div class="topic-chip"><span class="topic-chip-icon">🇺🇸</span><div class="topic-chip-name">米国株</div></div>
+        <div class="topic-chip"><span class="topic-chip-icon">🌐</span><div class="topic-chip-name">新興国</div></div>
+        <div class="topic-chip"><span class="topic-chip-icon">💰</span><div class="topic-chip-name">高配当</div></div>
+        <div class="topic-chip"><span class="topic-chip-icon">🚀</span><div class="topic-chip-name">成長株</div></div>
+        <div class="topic-chip"><span class="topic-chip-icon">📦</span><div class="topic-chip-name">ETF</div></div>
+      </div>
+    </div>
+
+    <!-- ARTICLES TAB (hidden) -->
+    <div id="theme-tab-articles" style="display:none">
+      <div class="theme-articles">
+        <div class="theme-article-card" onclick="showArticle()">
+          <span class="tac-level level-beginner">入門</span>
+          <div class="card-title">PERとPBRの正しい使い方 — 割安株を見つける基礎</div>
+          <p class="card-desc">バリュエーション指標の基本を丁寧に解説。スクリーニングへの応用まで。</p>
+          <div class="card-meta"><span>2026.02.18</span><span>·</span><span>8 min</span></div>
+        </div>
+        <div class="theme-article-card" onclick="showArticle()">
+          <span class="tac-level level-intermediate">中級</span>
+          <div class="card-title">セクターローテーション戦略 — 景気サイクルに乗る</div>
+          <p class="card-desc">景気の各フェーズで強いセクターを特定し、先回りするためのフレームワーク。</p>
+          <div class="card-meta"><span>2026.02.18</span><span>·</span><span>11 min</span></div>
+        </div>
+        <div class="theme-article-card" onclick="showArticle()">
+          <span class="tac-level level-advanced">上級</span>
+          <div class="card-title">DCFモデルで適正株価を算出する — 実践ステップ</div>
+          <p class="card-desc">将来キャッシュフローの割引計算。エクセルテンプレート付きで徹底解説。</p>
+          <div class="card-meta"><span>2026.02.18</span><span>·</span><span>15 min</span></div>
+        </div>
+        <div class="theme-article-card" onclick="showArticle()">
+          <span class="tac-level level-beginner">入門</span>
+          <div class="card-title">日本株の選び方 — 初心者が最初に知るべき5つのポイント</div>
+          <p class="card-desc">銘柄選択の考え方を、具体例を交えてわかりやすく解説します。</p>
+          <div class="card-meta"><span>2026.02.18</span><span>·</span><span>7 min</span></div>
+        </div>
+        <div class="theme-article-card" onclick="showArticle()">
+          <span class="tac-level level-intermediate">中級</span>
+          <div class="card-title">決算書の読み方 — 財務3表を30分で理解する</div>
+          <p class="card-desc">損益計算書・貸借対照表・キャッシュフロー計算書の連関を図解。</p>
+          <div class="card-meta"><span>2026.02.18</span><span>·</span><span>12 min</span></div>
+        </div>
+        <div class="theme-article-card" onclick="showArticle()">
+          <span class="tac-level level-advanced">上級</span>
+          <div class="card-title">クオンツ投資入門 — データドリブンな銘柄選択</div>
+          <p class="card-desc">ファクター投資の理論と実践。モメンタム・バリュー・クオリティファクターの活用。</p>
+          <div class="card-meta"><span>2026.02.18</span><span>·</span><span>18 min</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREENER TAB (hidden) -->
+    <div id="theme-tab-screener" style="display:none">
+      <div class="screener-box">
+        <div class="screener-header">
+          <span class="screener-title">銘柄スクリーナー — 日本株</span>
+          <div class="screener-filters">
+            <button class="screener-filter active">全セクター</button>
+            <button class="screener-filter">金融</button>
+            <button class="screener-filter">テック</button>
+            <button class="screener-filter">製造業</button>
+            <button class="screener-filter">小売</button>
+          </div>
+        </div>
+        <table class="screener-table">
+          <thead>
+            <tr>
+              <th>銘柄名</th>
+              <th>セクター</th>
+              <th>株価</th>
+              <th>前日比</th>
+              <th>PER</th>
+              <th>PBR</th>
+              <th>配当利回り</th>
+              <th>ROE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr onclick="showArticle()">
+              <td><div class="stock-name">トヨタ自動車</div><div class="stock-code">7203</div></td>
+              <td style="color:var(--text-muted);font-size:0.72rem">自動車</td>
+              <td>3,842</td>
+              <td class="up">+1.82%</td>
+              <td>10.2x</td>
+              <td>1.4x</td>
+              <td class="up">2.8%</td>
+              <td>14.2%</td>
+            </tr>
+            <tr onclick="showArticle()">
+              <td><div class="stock-name">三菱UFJ FG</div><div class="stock-code">8306</div></td>
+              <td style="color:var(--text-muted);font-size:0.72rem">金融</td>
+              <td>1,524</td>
+              <td class="up">+2.44%</td>
+              <td>12.8x</td>
+              <td>0.9x</td>
+              <td class="up">3.2%</td>
+              <td>8.8%</td>
+            </tr>
+            <tr onclick="showArticle()">
+              <td><div class="stock-name">ソニーグループ</div><div class="stock-code">6758</div></td>
+              <td style="color:var(--text-muted);font-size:0.72rem">テック</td>
+              <td>13,270</td>
+              <td class="down">-0.38%</td>
+              <td>18.4x</td>
+              <td>2.8x</td>
+              <td class="up">0.6%</td>
+              <td>16.1%</td>
+            </tr>
+            <tr onclick="showArticle()">
+              <td><div class="stock-name">東京エレクトロン</div><div class="stock-code">8035</div></td>
+              <td style="color:var(--text-muted);font-size:0.72rem">半導体</td>
+              <td>38,490</td>
+              <td class="up">+3.12%</td>
+              <td>28.2x</td>
+              <td>9.1x</td>
+              <td style="color:var(--text-muted)">0.9%</td>
+              <td>32.4%</td>
+            </tr>
+            <tr onclick="showArticle()">
+              <td><div class="stock-name">NTTデータ</div><div class="stock-code">9613</div></td>
+              <td style="color:var(--text-muted);font-size:0.72rem">IT</td>
+              <td>2,284</td>
+              <td class="up">+0.62%</td>
+              <td>22.1x</td>
+              <td>3.2x</td>
+              <td class="up">1.4%</td>
+              <td>11.8%</td>
+            </tr>
+            <tr onclick="showArticle()">
+              <td><div class="stock-name">任天堂</div><div class="stock-code">7974</div></td>
+              <td style="color:var(--text-muted);font-size:0.72rem">ゲーム</td>
+              <td>8,124</td>
+              <td class="down">-1.04%</td>
+              <td>16.8x</td>
+              <td>3.8x</td>
+              <td class="up">3.1%</td>
+              <td>22.6%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GUIDE TAB (hidden) -->
+    <div id="theme-tab-guide" style="display:none">
+      <div class="section-label" style="margin-bottom:2rem">入門ロードマップ</div>
+      <div class="articles-grid">
+        <div class="article-card featured" onclick="showArticle()">
+          <span class="card-cat">Step 1 · 基礎</span>
+          <div class="card-title">株式投資とは何か — 仕組みと基本用語</div>
+          <p class="card-desc">株とは何か、なぜ価格が動くのか。完全な初心者でも理解できる入門解説。</p>
+          <div class="card-meta"><span>入門</span><span>·</span><span>15 min</span></div>
+        </div>
+        <div class="article-card" onclick="showArticle()">
+          <span class="card-cat">Step 2</span>
+          <div class="card-title">証券口座の選び方と開設手順</div>
+          <div class="card-meta"><span>入門</span><span>·</span><span>8 min</span></div>
+        </div>
+        <div class="article-card" onclick="showArticle()">
+          <span class="card-cat">Step 3</span>
+          <div class="card-title">最初の1銘柄の選び方</div>
+          <div class="card-meta"><span>入門</span><span>·</span><span>10 min</span></div>
+        </div>
+        <div class="article-card" onclick="showArticle()">
+          <span class="card-cat">Step 4</span>
+          <div class="card-title">分散投資の考え方と実践</div>
+          <div class="card-meta"><span>初級</span><span>·</span><span>9 min</span></div>
+        </div>
+        <div class="article-card" onclick="showArticle()">
+          <span class="card-cat">Step 5</span>
+          <div class="card-title">決算発表と株価の関係</div>
+          <div class="card-meta"><span>中級</span><span>·</span><span>11 min</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /theme-body -->
+
+  <div class="nl-bar">
+    <div class="nl-bar-text"><h3>毎朝7時、相場の本質を</h3><p>無料のニュースレターで最新分析をお届け。</p></div>
+    <div class="nl-bar-form"><input class="nl-input" type="email" placeholder="メールアドレスを入力"><button class="btn-primary">購読する</button></div>
+  </div>
+  <footer>
+    <div><a class="logo" onclick="showPage('home')">CAPITAL <span>LENS</span></a><p class="footer-desc">投資の本質を、深く、わかりやすく。</p></div>
+    <div class="footer-col"><h4>テーマ</h4><ul><li><a onclick="showTheme('株式分析')">株式分析</a></li><li><a onclick="showTheme('不動産・REIT')">不動産・REIT</a></li><li><a onclick="showTheme('暗号資産')">暗号資産</a></li><li><a onclick="showTheme('NISA')">NISA</a></li></ul></div>
+    <div class="footer-col"><h4>コンテンツ</h4><ul><li><a onclick="showPage('home')">ホーム</a></li><li><a onclick="showPage('market')">マーケット</a></li></ul></div>
+    <div class="footer-col"><h4>メディア</h4><ul><li><a>About</a></li><li><a>X (Twitter)</a></li></ul></div>
+  </footer>
+  <div class="footer-bottom"><p>© 2026 CAPITAL LENS.</p></div>
+  <p class="disclaimer">※ 投資に関する情報は参考目的のみです。</p>
+</div>
+
+<script>
+// ===== PAGE NAVIGATION =====
+const themeData = {
+  '株式分析': { icon:'📊', desc:'国内外の個別株・ETFを徹底分析。財務諸表の読み方からバリュエーション手法まで、あらゆるレベルの投資家向けコンテンツ。' },
+  '不動産・REIT': { icon:'🏢', desc:'J-REITから実物不動産まで。少額から始められる不動産投資の仕組みと、利回り分析・銘柄選定のポイントを解説。' },
+  '暗号資産': { icon:'₿', desc:'ビットコイン・イーサリアムを中心に、機関投資家目線でデジタル資産市場を解析。リスク管理から長期保有戦略まで。' },
+  'NISA': { icon:'🛡️', desc:'新NISA・iDeCoを活用した長期資産形成。非課税制度を最大限活かすための戦略と具体的な銘柄・ファンド選択。' },
+  '新興国投資': { icon:'🌏', desc:'インド・東南アジア・中東など急成長市場への投資機会とリスク。分散投資の観点から新興国への適切な配分を考える。' },
+  '資産保全': { icon:'🔒', desc:'インフレ対策・通貨分散・安全資産。資産を守りながら着実に増やすための保守的投資アプローチ。' },
+  'バリュー投資': { icon:'💎', desc:'割安株を発掘する定量・定性分析の手法。バフェット流の長期バリュー投資を実践するためのフレームワーク。' },
+  '成長株': { icon:'🚀', desc:'高成長企業を早期発見するための分析手法。テクノロジー・ヘルスケアなど成長セクターの見方と注意点。' },
+  '配当投資': { icon:'💰', desc:'安定した配当収入を積み上げる投資戦略。高配当株の選定基準・配当の持続性評価・ポートフォリオ構築まで。' },
+  'インデックス': { icon:'📉', desc:'コストを最小化しながら市場平均リターンを得るインデックス投資。全世界・米国・国内などのファンド比較と選び方。' },
+  '債券': { icon:'📋', desc:'固定利付資産の基礎から応用まで。国債・社債・外国債券の仕組みと金利環境に応じた活用戦略。' },
+  'iDeCo': { icon:'🏦', desc:'老後資産形成のためのiDeCo完全活用ガイド。掛け金設定・運用商品選択・受け取り方まで総合的に解説。' },
+};
+
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+pageId).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function showArticle() {
+  showPage('article');
+}
+
+function showTheme(themeName) {
+  const data = themeData[themeName] || { icon:'📊', desc:'このテーマに関する詳細な投資情報をお届けします。' };
+  document.getElementById('theme-hero-area').setAttribute('data-icon', data.icon);
+  document.getElementById('theme-title').textContent = themeName;
+  document.getElementById('theme-desc-short').textContent = data.desc;
+  // reset tabs
+  switchThemeTab(document.querySelector('.theme-nav-btn'), 'overview');
+  showPage('theme');
+}
+
+// ===== MARKET TABS =====
+function switchMarketTab(btn, tabId) {
+  document.querySelectorAll('.market-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  ['indices','forex','crypto','sectors'].forEach(id => {
+    const el = document.getElementById('tab-'+id);
+    if(el) el.style.display = id === tabId ? 'block' : 'none';
+  });
+}
+
+// ===== THEME TABS =====
+function switchThemeTab(btn, tabId) {
+  document.querySelectorAll('.theme-nav-btn').forEach(t => t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  ['overview','articles','screener','guide'].forEach(id => {
+    const el = document.getElementById('theme-tab-'+id);
+    if(el) el.style.display = id === tabId ? 'block' : 'none';
+  });
+}
+
+// ===== SCREENER FILTERS =====
+document.querySelectorAll('.screener-filter').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.screener-filter').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// ===== NAVBAR SCROLL =====
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 30);
+});
+
+// ===== FADE UP OBSERVER =====
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
